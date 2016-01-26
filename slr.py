@@ -6,6 +6,17 @@ SLR PARSING
 
 from Grammar import Grammar
 from goto import GotoGenerator
+# grammar = """
+# S' := S
+# S := A c A
+# S := B c c B
+# A := c A
+# A := a
+# B := c c B
+# B := b
+# """
+
+
 grammar = """
 S' := S
 S := q A B C
@@ -14,6 +25,8 @@ B := a | E
 C := b | E
 D := C | E
 """
+
+
 # grammar = """
 # S' := S
 # S := q A B C

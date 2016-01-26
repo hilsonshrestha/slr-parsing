@@ -25,6 +25,9 @@ class Production(object):
 	def increment_dot(self):
 		self.dot += 1
 
+	def __eq__(self, other):
+		return True if self.non_terminal == other.non_terminal and self.production == other.production and self.dot == other.dot else False
+
 	@staticmethod
 	def get(str_productions, grammar):
 		left, right = str_productions.split(":=")
