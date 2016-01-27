@@ -1,13 +1,21 @@
+"""
+January 27, 2015
+"""
 class Symbol(object):
+	"""Symbol"""
 	def __init__(self, symbol, grammar):
 		self.symbol = symbol.strip()
 		self.grammar = grammar
+
+		# Terminal is set to True if it is terminal. This variable is used for
+		# quick access instead of searching the grammar again and again.
 		self.terminal = None
 
 	def is_terminal(self):
+		# Checks if the symbol is terminal. For first time request, it checks the
+		# gramar. Later, terminal variable is directly used.
 		if self.terminal == None:
 			self.terminal = self.symbol not in self.grammar.non_terminals
-		# print self.symbol, self.terminal
 		return self.terminal
 
 	def __str__(self):

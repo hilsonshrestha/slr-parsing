@@ -3,33 +3,35 @@ Grammar class
 
 Note: Make sure that each word in raw is separated by a space
 
+January 27, 2016
 '''
 
-from Production import Production
+from Production import ProductionGenerator
 
 class Grammar(object):
-	def __init__(self, raw):
-		self.raw = raw #.replace(" ", "")
-		self.grammar = []
-		self.non_terminals = []
-		root = False
-		for line in self.raw.split("\n"):
-			if line.find(":=") < 0: continue
-			# print line
-			ps = Production.get(line, self)
-			for p in ps:
-				self.grammar.append(p) 
-				if p.non_terminal not in self.non_terminals:
-					self.non_terminals.append(p.non_terminal)
-				# print p		
-		# print "==="
-		# print self.non_terminals
+  def __init__(self, raw):
+    # Raw grammar.
+    self.raw = raw
 
-		# for production in self.grammar:
-		# 	if production.non_terminal in self.non_terminals:
-		# 		production.is_terminal = False
+    # Parsed grammar.
+    self.grammar = []
 
-	def __str__(self):
-		return str(self.grammar)
+    self.non_terminals = []
 
+  def parse(self):
+    for line in self.raw.split("\n"):
+      if line.find(":=") < 0: continue
 
+      # Raw production may have splitter "|". So, it is split into multiple
+      # productions to generate a list.
+      ps = ProductionGenerator(line, self).generate()
+      for p in ps:
+        self.grammar.append(p) 
+        if p.non_terminal not in self.non_terminals:
+          self.non_terminals.append(p.non_terminal)
+
+  def __str__(self):
+    r = ""
+    for production in self.grammar:
+      r += str(production) + "\n"
+    return r

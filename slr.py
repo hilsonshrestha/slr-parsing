@@ -44,7 +44,10 @@ def main():
   global input, grammar
 
   g = Grammar(grammar)
-  goto_1 = GotoGenerator(g)
+  g.parse()
+  gotos = GotoGenerator(g)
+  gotos.generate()
+  gotos.display()
   # goto_2 = Goto()
 
   # print g
