@@ -44,6 +44,8 @@ class GotoGenerator(object):
 		# List of Gotos produced from the grammar.
 		self.gotos = []
 
+		self.goto_dict = {}
+
 		# Expected id for the next Goto function. It is incremented at every step
 		# but if duplicate productions are found in previous gotos, the number is
 		# again decremented.
@@ -100,6 +102,13 @@ class GotoGenerator(object):
 			if gotos_index > MAX_LOOP:
 				print "ERROR: MAX LOOP EXCEEDED."
 				break
+
+		self.fill_goto_dict()
+
+
+	def fill_goto_dict(self):
+		for goto in self.gotos:
+			self.goto_dict[str(goto.parent_goto) + str(goto.closure)] = goto
 
 	def get_goto(self, productions, symbol, parent_goto):
 		# Generates goto sequence from given productions.

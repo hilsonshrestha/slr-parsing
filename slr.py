@@ -6,6 +6,7 @@ SLR PARSING
 
 from Grammar import Grammar
 from goto import GotoGenerator
+from ParsingTable import Table
 # grammar = """
 # S' := S
 # S := A c A
@@ -49,6 +50,8 @@ def main():
   gotos.generate()
   gotos.display()
   # goto_2 = Goto()
+
+  # parsingTable = ParsingTable(gotos)
 
   # print g
   # parser = Parser(Grammar(grammar), input)
