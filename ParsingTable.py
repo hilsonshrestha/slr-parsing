@@ -49,6 +49,7 @@ class Table(object):
 				# print goto
 				goto_to_shift = self.gotos.goto_dict[str(goto.id) + production.next_symbol().symbol]
 				# print goto_to_shift.parent_goto, goto_to_shift.closure, goto_to_shift.id
+				
 				self.insert(goto_to_shift.parent_goto, goto_to_shift.closure, "S" + str(goto_to_shift.id))
 		# for production in self.grammar.grammar:
 		# 	print production
