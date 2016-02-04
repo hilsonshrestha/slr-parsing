@@ -6,18 +6,24 @@ Note: Make sure that each word in raw is separated by a space
 January 27, 2016
 '''
 
-from Production import ProductionGenerator
+import copy
+from Production import ProductionGenerator, Production
+from First_Follow import First_Follow
 
 class Grammar(object):
   def __init__(self, raw):
     # Raw grammar.
     self.raw = raw
 
+    # Following are calculated during parse.
+
     # Parsed grammar.
     self.grammar = []
 
     self.non_terminals = []
     self.terminals = []
+
+    self.first_follow = None
 
   def parse(self):
     for line in self.raw.split("\n"):
@@ -38,8 +44,44 @@ class Grammar(object):
     for symbol in self.non_terminals:
       if symbol in self.terminals: self.terminals.remove(symbol)
 
+    self.first_follow = First_Follow(self)
+
+
   def __str__(self):
     r = ""
     for production in self.grammar:
       r += str(production) + "\n"
+    return r
+
+  def get(self, non_terminal):
+    for production in self.grammar:
+      if production.non_terminal == non_terminal:
+        yield production
+
+
+  def get_dot_terminal_productions(self):
+    r = []
+    for production in self.grammar:
+      dot_indices = [i for i, symbol in enumerate(production.production) if symbol.symbol in self.terminals]
+      for index in dot_indices:
+        new_production = copy.copy(production)
+        new_production.dot = index
+        r.append(new_production)
+
+    print "\nList of Productions that has dot before terminals:"
+    for production in r:
+      print production
+    return r
+
+  def get_alpha_dot_productions(self):
+    r = []
+    for production in self.grammar:
+      if len(production.production):
+        new_production = copy.copy(production)
+        new_production.dot = len(new_production.production)
+        r.append(new_production)
+
+    print "\nList of Productions with dot at the end:"
+    for production in r:
+      print production
     return r

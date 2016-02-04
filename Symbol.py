@@ -26,4 +26,17 @@ class Symbol(object):
 			return True
 		elif isinstance(other, int) and other == self.symbol:
 			return True
+		elif isinstance(other, str) and other == self.symbol:
+			return True
 		return False
+
+
+def main():
+	a = Symbol("a", None)
+	b = Symbol("b", None)
+	aa = Symbol("a", None)
+
+	print [Symbol("c", None), Symbol("a", None)].index(aa)
+
+if __name__ == '__main__':
+	main()

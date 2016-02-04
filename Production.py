@@ -6,8 +6,9 @@ from Symbol import Symbol
 
 class Production(object):
   """Production"""
+  index = 1
 
-  def __init__(self, non_terminal, production, grammar):
+  def __init__(self, non_terminal, production, grammar, dot = 0):
     super(Production, self).__init__()
     # If the production string is 
     #   A := a b . C
@@ -17,8 +18,10 @@ class Production(object):
 
     self.non_terminal = non_terminal
     self.production = production
-    self.dot = 0
+    self.dot = dot
     self.grammar = grammar
+    self.index = Production.index
+    Production.index += 1
 
   def next_symbol(self):
     # Returns next symbol after dot.

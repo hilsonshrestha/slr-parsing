@@ -32,6 +32,15 @@ class Goto(object):
 			if production not in other.productions: return False
 		return True
 
+	def has_production(self, searched_production):
+		for production in self.productions:
+			if production == searched_production:
+				return True
+
+	def __str__(self):
+		return "GOTO[" + str(self.parent_goto) + ", " + \
+					  str(self.closure) + "] => " + str(self.id)
+			
 
 class GotoGenerator(object):
 	"""Generates Goto of a given grammar."""
@@ -43,6 +52,7 @@ class GotoGenerator(object):
 
 		# List of Gotos produced from the grammar.
 		self.gotos = []
+		self.first_closure = Goto(self.grammar.grammar, "", None, 0)
 
 		self.goto_dict = {}
 
@@ -73,6 +83,10 @@ class GotoGenerator(object):
 
 		# Start with the given grammar.
 		productions = self.grammar.grammar
+
+		# closure_0 = Goto(productions, "", None, 0)
+		# self.gotos.append(closure_0)
+
 		gotos_index = 0
 		parent_goto = 0
 		prev_parent_goto = 0
@@ -157,8 +171,27 @@ class GotoGenerator(object):
 		print "Closure => 0"
 		print self.grammar
 		for goto in self.gotos:
-			print "GOTO[" + str(goto.parent_goto) + ", " + \
-					  str(goto.closure) + "] => " + str(goto.id)
+			print goto
+			# print "GOTO[" + str(goto.parent_goto) + ", " + \
+			# 		  str(goto.closure) + "] => " + str(goto.id)
 			for production in goto.productions:
 				print production
 			print ""
+
+	def find_production(self, production):
+		# productions = []
+		# for goto in self.gotos:
+		# 	p = goto.has_production(production)
+		# return productions
+		r = []
+
+		if self.first_closure.has_production(production):
+			r.append(self.first_closure)
+
+		r += [goto for goto in self.gotos if goto.has_production(production)]
+
+		
+		# check for closure I0
+
+
+		return r

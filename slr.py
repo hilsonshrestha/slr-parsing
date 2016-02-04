@@ -7,25 +7,25 @@ SLR PARSING
 from Grammar import Grammar
 from goto import GotoGenerator
 from ParsingTable import Table
-# grammar = """
-# S' := S
-# S := A c A
-# S := B c c B
-# A := c A
-# A := a
-# B := c c B
-# B := b
-# """
-
-
 grammar = """
 S' := S
-S := q A B C
-A := a | b b D
-B := a | E
-C := b | E
-D := C | E
+S := A c A
+S := B c c B
+A := c A
+A := a
+B := c c B
+B := b
 """
+
+
+# grammar = """
+# S' := S
+# S := q A B C
+# A := a | b b D
+# B := a | E
+# C := b | E
+# D := C | E
+# """
 
 
 # grammar = """
@@ -49,9 +49,12 @@ def main():
   gotos = GotoGenerator(g)
   gotos.generate()
   gotos.display()
+
+  g.first_follow.display()
   # goto_2 = Goto()
 
-  # parsingTable = ParsingTable(gotos)
+  parsingTable = Table(g, gotos)
+  parsingTable.generate()
 
   # print g
   # parser = Parser(Grammar(grammar), input)
