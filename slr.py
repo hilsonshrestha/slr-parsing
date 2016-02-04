@@ -5,7 +5,7 @@ SLR PARSING
 '''
 
 from Grammar import Grammar
-from goto import GotoGenerator
+from Goto import GotoGenerator
 from ParsingTable import Table
 grammar = """
 S' := S
