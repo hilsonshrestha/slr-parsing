@@ -172,26 +172,16 @@ class GotoGenerator(object):
 		print self.grammar
 		for goto in self.gotos:
 			print goto
-			# print "GOTO[" + str(goto.parent_goto) + ", " + \
-			# 		  str(goto.closure) + "] => " + str(goto.id)
 			for production in goto.productions:
 				print production
 			print ""
 
 	def find_production(self, production):
-		# productions = []
-		# for goto in self.gotos:
-		# 	p = goto.has_production(production)
-		# return productions
 		r = []
 
 		if self.first_closure.has_production(production):
 			r.append(self.first_closure)
 
 		r += [goto for goto in self.gotos if goto.has_production(production)]
-
-		
-		# check for closure I0
-
 
 		return r

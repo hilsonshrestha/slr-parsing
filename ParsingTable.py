@@ -27,11 +27,24 @@ class Table(object):
 		return str(state) + str(action)
 
 	def insert(self, state, action, value):
-		self.table[self.key(state, action)] = {
-			"state": state,
-			"action": action,
-			"value": value
-		}
+		k = self.key(state, action)
+		if k not in self.table:
+			self.table[k] = {
+				"state": state,
+				"action": action,
+				"value": set([value])
+			}
+		else:
+			self.table[k]["value"].add(value)
+
+		# self.table[k] = {
+		# 	"state": state,
+		# 	"action": action,
+		# 	"value": set([value]) if k not in self.table else self.table[k]["value"] + ", " + value
+		# }
+
+	def get(self, state, action):
+		return self.table[self.key(state, action)]
 
 	def generate(self):
 		print "## Generate parsing table"
@@ -59,12 +72,13 @@ class Table(object):
 
 		for production in productions:
 			follows = self.grammar.first_follow.follow[production.non_terminal]
-			goto = self.gotos.find_production(production)[0]
+			gotos = self.gotos.find_production(production)
 			for follow in follows:
 				for g_production in self.grammar.grammar:
 					if g_production.non_terminal == production.non_terminal and \
 						g_production.production == production.production:
-						self.insert(goto.id, follow, "R" + str(production.index))
+						for goto in gotos:
+							self.insert(goto.id, follow, "R" + str(production.index))
 
 	def generate_goto(self):
 		non_terminals = self.grammar.non_terminals[1:]
@@ -87,15 +101,15 @@ class Table(object):
 		for key in self.table:
 			o = self.table[key]
 			# table[o["state"]][display_keys.index(o["action"].symbol)] = o["value"]
-			table[o["state"]][display_keys.index(o["action"])] = o["value"]
+			table[o["state"]][display_keys.index(o["action"])] = list(o["value"])
 
 		print "   |",
 		for cnt, key in enumerate(display_keys):
-			print "%7s" %key, "|",
-		print "\n","-" * (10 * (cnt + 1) + 4)
+			print "%12s" %key, "|",
+		print "\n","-" * (15 * (cnt + 1) + 4)
 
 		for i, line in enumerate(table):
 			print "%2d |" %i,
 			for value in line:
-				print "%7s" % value, "|",
+				print "%12s" % value, "|",
 			print 
