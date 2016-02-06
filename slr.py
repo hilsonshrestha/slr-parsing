@@ -19,39 +19,41 @@ B := c c B
 B := b
 """
 
-
-# grammar = """
-# S' := S
-# S := q A B C
-# A := a | b b D
-# B := a | E
-# C := b | E
-# D := C | E
-# """
-
-
-# grammar = """
-# S' := S
-# S := q A B C
-# A := B b b D
-# B := C | E
-# C := b | E
-# D := C | E
-# """
-
+input = "a c c a"
 
 grammar = """
 S' := S
-S := L = R
-S := R
-L := * R
-L := id
-R := L
+S := q A B C
+A := a | b b D
+B := a | E
+C := b | E
+D := C | E
 """
+input = "q a a b"
 
 
-input = "a a b b a a b b"
-input = "q a b"
+# grammar = """
+# # S' := S
+# # S := q A B C
+# # A := B b b D
+# # B := C | E
+# # C := b | E
+# # D := C | E
+# # """
+
+
+# grammar = """
+# S' := S
+# S := L = R
+# S := R
+# L := * R
+# L := id
+# R := L
+# """
+
+
+# input = "a a b b a a b b"
+# input = "q a b"
 
 def main():
   global input, grammar
@@ -67,7 +69,7 @@ def main():
   parsing_table = Table(g, gotos)
   parsing_table.generate()
 
-  lr_parser = LR_Parser(parsing_table, input)
+  lr_parser = LR_Parser(g, parsing_table, input)
   lr_parser.parse()
 
   # print parsingTable.get("5", "$")
