@@ -3,60 +3,34 @@
 SLR PARSING
 
 '''
+import sys
 
 from Grammar import Grammar
 from Goto import GotoGenerator
 from ParsingTable import Table
 from LR_Parser import LR_Parser
 
-grammar = """
-S' := S
-S := A c A
-S := B c c B
-A := c A
-A := a
-B := c c B
-B := b
-"""
-
-input = "a c c a"
+# default grammar and input string if no argument is given by user
 
 grammar = """
-S' := S
-S := q A B C
-A := a | b b D
-B := a | E
-C := b | E
-D := C | E
+X' := S
+S := T S'
+S' := + T S' | E
+T := F T'
+T' := * F T' | E
+F := ( S ) | id
 """
-input = "q a a b"
+input = "id + ( id * id )"
 
 
-# grammar = """
-# # S' := S
-# # S := q A B C
-# # A := B b b D
-# # B := C | E
-# # C := b | E
-# # D := C | E
-# # """
-
-
-# grammar = """
-# S' := S
-# S := L = R
-# S := R
-# L := * R
-# L := id
-# R := L
-# """
-
-
-# input = "a a b b a a b b"
-# input = "q a b"
-
-def main():
+def main(*argv):
   global input, grammar
+  if len(argv[0]) == 2:
+    grammar = """"""
+    with open(argv[0][0], 'r') as content_file:
+        grammar = content_file.read()
+
+    input = argv[0][1]
 
   g = Grammar(grammar)
   g.parse()
@@ -75,4 +49,4 @@ def main():
   # print parsingTable.get("5", "$")
 
 if __name__ == '__main__':
-  main()
+  main(sys.argv[1:])

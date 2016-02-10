@@ -103,6 +103,13 @@ class Table(object):
 			# table[o["state"]][display_keys.index(o["action"].symbol)] = o["value"]
 			table[o["state"]][display_keys.index(o["action"])] = list(o["value"])
 
+
+		def list_to_str(l):
+			r = ""
+			for x in l:
+				r += str(x) + " "
+			return r
+
 		print "   |",
 		for cnt, key in enumerate(display_keys):
 			print "%12s" %key, "|",
@@ -111,5 +118,5 @@ class Table(object):
 		for i, line in enumerate(table):
 			print "%2d |" %i,
 			for value in line:
-				print "%12s" % value, "|",
+				print "%12s" % list_to_str(value), "|",
 			print 

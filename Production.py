@@ -65,7 +65,7 @@ class ProductionGenerator(object):
   def generate(self):
     # Generates productions of the grammar.
 
-    super(ProductionGenerator, self).__init__()
+    # super(ProductionGenerator, self).__init__()
     left, right = self.str_productions.split(":=")
     left = left.strip()
     productions_split = right.split("|")
@@ -83,12 +83,18 @@ class ProductionGenerator(object):
     
 
 def main():
-  # ps = Production.get("B := a b c | d e f | x B")
-  # ps = Production.get("B := a b c | d e f | x B")
-  ps = ProductionGenerator("B := a b c | d e f | E", None).generate()
-  # ps = Production.get("S' := S")
-  for p in ps:
+  # # ps = Production.get("B := a b c | d e f | x B")
+  # # ps = Production.get("B := a b c | d e f | x B")
+  ps = ProductionGenerator("B := a b c | X e f | E", None)
+  generated_produtions = ps.generate()
+
+  # print ps
+  # # ps = Production.get("S' := S")
+  for p in generated_produtions:
     print p
+
+
+  # a = Production()
 
 if __name__ == '__main__':
   main()

@@ -1,0 +1,6 @@
+X' := S
+S := T S'
+S' := + T S' | E
+T := F T'
+T' := * F T' | E
+F := ( S ) | id

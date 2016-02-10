@@ -17,12 +17,13 @@ class Goto(object):
 		# List of productions in the Goto set.
 		self.productions = productions
 
+		self.parent_goto = parent_goto
+
 		# symbol by which closure is generated.
 		self.closure = closure
 
-		self.parent_goto = parent_goto
-
 		self.id = id
+
 
 	def __eq__(self, other):
 		# Two Gotos are equal when every production in a goto matches the
@@ -50,16 +51,27 @@ class GotoGenerator(object):
 
 		self.grammar = grammar
 
-		# List of Gotos produced from the grammar.
-		self.gotos = []
-		self.first_closure = Goto(self.grammar.grammar, "", None, 0)
-
-		self.goto_dict = {}
-
 		# Expected id for the next Goto function. It is incremented at every step
 		# but if duplicate productions are found in previous gotos, the number is
 		# again decremented.
 		self.expected_id = 0
+
+
+		# List of Gotos produced from the grammar.
+		self.gotos = []
+		# self.first_closure = Goto(self.grammar.grammar, "S", None, 0)
+
+		r = [self.grammar.grammar[0]]
+		self.recursive_non_terminal_lookup(r[0], r)
+
+		# self.first_closure = self.get_goto(self.grammar.grammar, "S", 0)
+
+		self.first_closure = Goto(r, "", None, 0)
+
+		# self.first_closure = Goto(self.grammar.grammar, "", None, 0)
+
+		self.goto_dict = {}
+
 
 	def get_symbols_after_dot(self, productions):
 		# Returns a list of symbols after dot from productions in a sequential
@@ -82,7 +94,8 @@ class GotoGenerator(object):
 		# Generate Gotos and its productions from the given grammar.
 
 		# Start with the given grammar.
-		productions = self.grammar.grammar
+		# productions = self.grammar.grammar
+		productions = self.first_closure.productions
 
 		# closure_0 = Goto(productions, "", None, 0)
 		# self.gotos.append(closure_0)
@@ -159,7 +172,7 @@ class GotoGenerator(object):
 		rec_productions = []
 		if given_production.is_next_terminal() == False:
 			for production in self.grammar.grammar:
-				if production.non_terminal == given_production.next_symbol().symbol:
+				if production.non_terminal == given_production.next_symbol().symbol and production not in r:
 					rec_productions.append(production)
 					if production not in r: r.append(production)
 
@@ -169,7 +182,11 @@ class GotoGenerator(object):
 	def display(self):
 		# Displays the generated Goto sequences.
 		print "Closure => 0"
-		print self.grammar
+		print self.first_closure
+		for production in self.first_closure.productions:
+			print production
+
+
 		for goto in self.gotos:
 			print goto
 			for production in goto.productions:

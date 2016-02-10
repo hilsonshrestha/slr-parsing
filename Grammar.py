@@ -33,6 +33,8 @@ class Grammar(object):
       # productions to generate a list.
       ps = ProductionGenerator(line, self).generate()
 
+      # Differentiate terminals and non terminals and place in 
+      # respective arrays.
       for p in ps:
         self.grammar.append(p)
         for symbol in p.production:
@@ -54,14 +56,18 @@ class Grammar(object):
     return r
 
   def get(self, non_terminal):
+    # returns a list of productions that has given non terminal.
     for production in self.grammar:
       if production.non_terminal == non_terminal:
         yield production
 
 
   def get_dot_terminal_productions(self):
+    # returns productions that hat dot before terminal.
+    # used for shifting.
     r = []
     for production in self.grammar:
+      # print ">>>", production
       dot_indices = [i for i, symbol in enumerate(production.production) if symbol.symbol in self.terminals]
       for index in dot_indices:
         new_production = copy.copy(production)
@@ -74,9 +80,10 @@ class Grammar(object):
     return r
 
   def get_alpha_dot_productions(self):
+    # returns proudctions that has dot at the end.
     r = []
     for production in self.grammar:
-      if len(production.production):
+      # if len(production.production):
         new_production = copy.copy(production)
         new_production.dot = len(new_production.production)
         r.append(new_production)
@@ -85,3 +92,4 @@ class Grammar(object):
     for production in r:
       print production
     return r
+

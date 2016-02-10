@@ -23,7 +23,8 @@ class LR_Parser(object):
 		final_loop = False
 		while (True):
 			try:
-				action = list(self.parsing_table.get(self.stack[-1], self.input[0])["value"])[0]
+				actions = list(self.parsing_table.get(self.stack[-1], self.input[0])["value"])
+				action = actions[0]
 			except KeyError:
 				print "invalid character ", self.input[0]
 				return False
@@ -31,7 +32,11 @@ class LR_Parser(object):
 
 			self.display_stack.append(copy.copy(self.stack))
 			self.display_input.append(copy.copy(self.input))
-			self.display_action.append(action)
+			self.display_action.append(actions)
+			if len(actions) > 1:
+				# print "Ambiguous actions", actions
+				break
+
 			# print final_loop
 			if final_loop:
 				break
@@ -41,12 +46,25 @@ class LR_Parser(object):
 				self.stack.append(action[1:])
 			if action[0] == "R":
 				production = self.grammar.grammar[int(action[1:]) - 1]
-				# print production
 				idx = int(action[1:]) - 1
 				length = len(production.production)
-				self.stack =  self.stack[:-2 * length]
+				if length != 0:
+					self.stack =  self.stack[:-2 * length]
 				self.stack.append(production.non_terminal)
+				# try:
+
 				self.stack.append(list(self.parsing_table.get(self.stack[-2], self.stack[-1])["value"])[0])
+				# actions = list(self.parsing_table.get(self.stack[-2], self.stack[-1])["value"])
+				# print "asldflkasjfdllsadflljasdfl" , actions
+				# if len(actions) > 1:
+				# 	print "asdflasdfl"
+				# 	break
+				# self.stack.append(actions[0])
+
+
+
+				# except:
+				# 	break
 				if list(self.parsing_table.get(self.stack[-1], self.input[0])["value"])[0] == "R1":
 					# statement is valid.
 					final_loop = True
@@ -67,7 +85,13 @@ class LR_Parser(object):
 		# Actual display of table.
 		print "\n ## String checking using stack\n"
 		for i, stack in enumerate(self.display_stack):
-			print "%3d | %-30s | %-30s | %-10s" %\
-			(i, list_to_str(stack), list_to_str(self.display_input[i]), self.display_action[i])
+			print "%3d | %-50s | %-40s | %-10s" %\
+			(i, list_to_str(stack), list_to_str(self.display_input[i]), list_to_str(self.display_action[i]))
+		if len(self.display_action[i]) > 1:
+			print "Ambiguous actions : FAIL"
+		elif self.display_action[i][0] == "R1":
+			print "Successfully Parsed"
+		else:
+			print "Unsuccessful Parsing"
 
 		

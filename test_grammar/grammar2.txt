@@ -1,0 +1,6 @@
+S' := S
+S := q A B C
+A := a | b b D
+B := a | E
+C := b | E
+D := C | E
