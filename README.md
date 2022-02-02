@@ -1,5 +1,6 @@
 # SLR Parsing
-Step wise implementation of SLR parsing
+
+Stepwise implementation of SLR parsing
 
 - Generates Goto
 - Calculates First and Follow
